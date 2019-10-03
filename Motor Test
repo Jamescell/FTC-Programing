@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 @Autonomous
 
@@ -14,8 +15,11 @@ public class Attempt extends LinearOpMode{
             telemetry.addData("Status","Initialized");
             telemetry.update();
             waitForStart();
-    
+        double tgtPower = 0;
         while (opModeIsActive()) {
+            telemetry.addData("Servo Position", servoTest.getPosition());
+            telemetry.addData("Target Power", tgtPower);
+            telemetry.addData("Motor Power", motorTest.getPower());
             telemetry.addData("Status","Running");
             telemetry.update();
         }
