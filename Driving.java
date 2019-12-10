@@ -34,6 +34,7 @@ public class Driving extends LinearOpMode {
         front_left  = hardwareMap.get(DcMotor.class, "back_left");
         front_right = hardwareMap.get(DcMotor.class, "back_right");
         rightServo = hardwareMap.get(Servo.class, "rightServo");
+        leftServo = hardwareMap.get(Servo.class, "leftServo");
         
         // Most robots need the motor on one side to be reversed to drive forward
         // Reverse the motor that runs backwards when connected directly to the battery
@@ -71,12 +72,15 @@ public class Driving extends LinearOpMode {
       if(gamepad1.dpad_down) {
  // move to 0 degrees.
     rightServo.setPosition(0);
+    leftServo.setPositon(0);
      } else if (gamepad1.dpad_right) {
  // move to 90 degrees.
     rightServo.setPosition(0.5);
+    leftServo.setPosition(0.5);
     } else if (gamepad1.dpad_up) {
  // move to 180 degrees.
      rightServo.setPosition(1);
+     lefttServo.setPosition(1);
      }
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
