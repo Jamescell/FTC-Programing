@@ -1,1 +1,47 @@
-//this shall be the autonomous programming
+package org.firstinspires.ftc.teamcode;
+
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+
+@Autonomous(name = "Autonoumous", group = "")
+public class AutoBoi extends LinearOpMode {
+
+  private DcMotor back_right;
+  private DcMotor back_left;
+  private DcMotor front_right;
+  private DcMotor front_left;
+  private Servo rightServo;
+  private Servo leftServo;
+
+  /**
+   * This function is executed when this Op Mode is selected from the Driver Station.
+   */
+  @Override
+  public void runOpMode() {
+    back_right = hardwareMap.dcMotor.get("back_right");
+    back_left = hardwareMap.dcMotor.get("back_left");
+    front_right = hardwareMap.dcMotor.get("front_right");
+    front_left = hardwareMap.dcMotor.get("front_left");
+
+    // Put initialization blocks here.
+    waitForStart();
+    if (opModeIsActive()) {
+      // Put run blocks here.
+      back_right.setPower(0.5);
+      back_left.setPower(-0.5);
+      front_right.setPower(0.5);
+      front_left.setPower(-0.5);
+      sleep(5000);
+      back_right.setPower(0);
+      back_left.setPower(0);
+      front_right.setPower(0);
+      front_left.setPower(0);
+      while (opModeIsActive()) {
+        // Put loop blocks here.
+        telemetry.update();
+      }
+    }
+  }
+}
