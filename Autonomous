@@ -1,48 +1,99 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
-@Autonomous(name = "Autonoumous", group = "")
-public class AutoBoi extends LinearOpMode {
+@TeleOp(name="Driving", group="Linear Opmode")
 
-  private DcMotor back_right;
-  private DcMotor back_left;
-  private DcMotor front_right;
-  private DcMotor front_left;
-  private Servo rightServo;
-  private Servo leftServo;
+public class Driving extends LinearOpMode {
 
-  /**
-   * This function is executed when this Op Mode is selected from the Driver Station.
-   */
-  @Override
-  public void runOpMode() {
-    back_right = hardwareMap.dcMotor.get("back_right");
-    back_left = hardwareMap.dcMotor.get("back_left");
-    front_right = hardwareMap.dcMotor.get("front_right");
-    front_left = hardwareMap.dcMotor.get("front_left");
-    leftServo = hardwareMap.dcMotor.get("leftServo");
-    rightServo = hardwareMap.dcMotor.get("rightServo");
-    // Put initialization blocks here.
-    waitForStart();
-    if (opModeIsActive()) {
-      // Put run blocks here.
-      back_right.setPower(0.5);
-      back_left.setPower(-0.5);
-      front_right.setPower(0.5);
-      front_left.setPower(-0.5);
-      sleep(5000);
-      back_right.setPower(0);
-      back_left.setPower(0);
-      front_right.setPower(0);
-      front_left.setPower(0);
-      while (opModeIsActive()) {
-        // Put loop blocks here.
+    // Declare OpMode members.
+    private ElapsedTime runtime = new ElapsedTime();
+    private DcMotor back_left = null;
+    private DcMotor back_right = null;
+    private DcMotor front_left = null;
+    private DcMotor front_right = null;
+    private Servo rightServo = null;
+    private Servo leftServo = null;
+    @Override
+    public void runOpMode() {
+        telemetry.addData("Status", "Initialized");
         telemetry.update();
-      }
+        
+
+        // Initialize the hardware variables. Note that the strings used here as parameters
+        // to 'get' must correspond to the names assigned during the robot configuration
+        // step (using the FTC Robot Controller app on the phone).
+        back_left  = hardwareMap.get(DcMotor.class, "back_left");
+        back_right = hardwareMap.get(DcMotor.class, "back_right");
+        front_left  = hardwareMap.get(DcMotor.class, "front_left");
+        front_right = hardwareMap.get(DcMotor.class, "front_right");
+        rightServo = hardwareMap.get(Servo.class, "rightServo");
+        leftServo = hardwareMap.get(Servo.class, "leftServo");
+        // Most robots need the motor on one side to be reversed to drive forward
+        // Reverse the motor that runs backwards when connected directly to the battery
+        back_left.setDirection(DcMotor.Direction.FORWARD);
+        front_left.setDirection(DcMotor.Direction.FORWARD);
+        back_right.setDirection(DcMotor.Direction.REVERSE);
+        front_right.setDirection(DcMotor.Direction.REVERSE);
+        // Wait for the game to start (driver presses PLAY)
+        waitForStart();
+        runtime.reset();
+        // run until the end of the match (driver presses STOP)
+        while (opModeIsActive()) {
+
+            // Setup a variable for each drive wheel to save power level for telemetry
+            double leftPower;
+            double rightPower;
+            //double leftServoPosition;
+            //double rightServoPosition;
+            // Choose to drive using either Tank Mode, or POV Mode
+            // Comment out the method that's not used.  The default below is POV.
+
+            double right = gamepad1.right_stick_y;
+            double left  = gamepad1.left_stick_y;
+            leftPower    = Range.clip(left, -1.0, 1.0) ;
+            rightPower   = Range.clip(right, -1.0, 1.0) ;
+            //double rightPos = gamepad2.right_stick_y;
+            //double leftPos  = gamepad2.left_stick_y;
+            //leftServoPosition    = Range.clip(leftPos, -1.0, 1.0) ;
+            //rightServoPosition   = Range.clip(rightPos, -1.0, 1.0) ;
+           
+           
+           
+            back_left.setPower(leftPower);
+            back_right.setPower(rightPower);
+            front_left.setPower(leftPower);
+            front_right.setPower(rightPower);
+            
+            if(gamepad2.dpad_up){
+                leftServo.setPosition(0.98);
+            }
+            if(gamepad2.dpad_left||gamepad2.dpad_right){
+                leftServo.setPosition(0.65);
+            }
+            if(gamepad2.x||gamepad2.b){
+                rightServo.setPosition(0.4);
+            }
+            if(gamepad2.y){
+                rightServo.setPosition(0.1);
+            }
+            
+            
+ // check to see if we need to move the servo.
+
+            // Show the elapsed game time and wheel power.
+            telemetry.addData("Status", "Run Time: " + runtime.toString());
+            telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+            //telemetry.addData("Servos", "left (%.2f), right (%.2f)", leftServoPosition, rightServoPosition);
+            telemetry.update();
+            
+            
+        }
     }
-  }
 }
