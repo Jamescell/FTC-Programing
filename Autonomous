@@ -24,7 +24,8 @@ public class AutoBoi extends LinearOpMode {
     back_left = hardwareMap.dcMotor.get("back_left");
     front_right = hardwareMap.dcMotor.get("front_right");
     front_left = hardwareMap.dcMotor.get("front_left");
-
+    leftServo = hardwareMap.dcMotor.get("leftServo");
+    rightServo = hardwareMap.dcMotor.get("rightServo");
     // Put initialization blocks here.
     waitForStart();
     if (opModeIsActive()) {
